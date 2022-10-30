@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\LandlordController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -13,6 +14,20 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
+Route::middleware('splade')->group(function () {
+    Route::spladeTable();
+
+    Route::get('/', function () {
+        return view('welcome');
+    });
+
+    Route::middleware('auth')->group(function () {
+        Route::get('/dashboard', function () {
+            return view('dashboard');
+        })->name('dashboard');
+
+        Route::resource('landlord', LandlordController::class);
+    });
+
+    require __DIR__ . '/auth.php';
 });
